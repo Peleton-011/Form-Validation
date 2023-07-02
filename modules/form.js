@@ -1,6 +1,0 @@
-class Form {
-
-    constructor(options) {
-        
-    }
-}
