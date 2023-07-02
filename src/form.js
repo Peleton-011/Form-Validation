@@ -4,13 +4,15 @@ class Form {
 	inputList = [];
 	constructor(options) {
 		const { inputList } = options || {};
-		this.inputList = inputList || [];
+		this.inputList = inputList || [new Input()];
 	}
 
 	getElement() {
 		const form = document.createElement("form");
 
-		form.textContent = "This is just a test";
+		this.inputList.forEach((input) => {
+			form.appendChild(input.getElement());
+		});
 
 		return form;
 	}

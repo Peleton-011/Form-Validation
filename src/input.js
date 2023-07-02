@@ -26,8 +26,18 @@ class Input {
 		"search",
 		"submit",
 	];
-	constructor({ type }) {
+	constructor(options) {
+        const { type } = options || {};
+        console.log("idk?")
 		//idk
+	}
+
+	getElement() {
+		const input = document.createElement("div");
+
+		input.textContent = "This is another test";
+
+		return input;
 	}
 }
 
