@@ -3,11 +3,14 @@ import Input from "./input.js";
 class Form {
 	inputList = [];
 	constructor(options) {
-		const { inputList } = options || {};
-		this.inputList = inputList || [new Input({type: "text"}), new Input({type: "textarea"}), 
+		const { inputList, title } = options || {};
+		this.inputList = inputList || [
+            new Input({type: "color"}), 
+            new Input({type: "textarea"}), 
         new Input({type: "select"}), 
         new Input({type: "cum"})
     ];
+        this.title = title || "Unnamed form";
 	}
 
 	getElement() {
@@ -16,6 +19,8 @@ class Form {
 		this.inputList.forEach((input) => {
 			form.appendChild(input.getElement());
 		});
+
+        form.setAttribute("title", this.title);
 
 		return form;
 	}
