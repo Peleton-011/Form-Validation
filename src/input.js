@@ -27,15 +27,39 @@ class Input {
 		"submit",
 	];
 	constructor(options) {
-        const { type } = options || {};
-        console.log("idk?")
+		const { type } = options || {};
+
+		this.type = type;
+
 		//idk
 	}
 
 	getElement() {
-		const input = document.createElement("div");
+        //Determine correct element type
+		const elementType =
+			this.types.includes(this.type)
+				? this.type === "textarea"
+					? "textarea"
+					: this.type === "select"
+					? "select"
+					: "input"
+				: "p";
+        //Create the element
+		const input = document.createElement(elementType);
 
-		input.textContent = "This is another test";
+        //Add type etc... based on options
+        switch (elementType) {
+            case "input":
+                input.setAttribute("type", this.type)
+                break;
+            
+            case "p":
+            input.textContent = "Sorry, '" + this.type + "' is not an accepted input type. Please try again"
+            break;
+        
+            default:
+                break;
+        }
 
 		return input;
 	}

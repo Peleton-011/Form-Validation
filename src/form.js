@@ -4,7 +4,10 @@ class Form {
 	inputList = [];
 	constructor(options) {
 		const { inputList } = options || {};
-		this.inputList = inputList || [new Input()];
+		this.inputList = inputList || [new Input({type: "text"}), new Input({type: "textarea"}), 
+        new Input({type: "select"}), 
+        new Input({type: "cum"})
+    ];
 	}
 
 	getElement() {
