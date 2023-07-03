@@ -8,7 +8,13 @@ class Form {
         //TESTING vv
 
         const inOpts = {
-            label: "testLabel"
+            label: "testLabel",
+            get id() {
+                if (!this._id) {
+                  this._id = 0;
+                }
+                return String(this._id++);
+              }
         }
 
         this.inputList = inputList || [

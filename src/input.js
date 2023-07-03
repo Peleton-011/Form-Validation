@@ -27,10 +27,11 @@ class Input {
 		"submit",
 	];
 	constructor(options) {
-		const { type, label } = options || {};
+		const { type, label, id } = options || {};
 
 		this.type = type;
 		this.label = label || null;
+        this.id = id || null;
 
 		//idk
 	}
@@ -42,7 +43,8 @@ class Input {
 		let input = document.createElement(elementType);
 		//Add type etc... based on options
 		this.#setTypeAttribute(input, elementType);
-
+        //Add id and such if necessary
+        input.id = this.id
 		//Add label if necessary
 		input = this.#addLabel(this.label, input)
 
@@ -54,7 +56,9 @@ class Input {
 		const temp = elem;
 		elem = document.createElement("div");
 		const labelElem = document.createElement("label");
-		labelElem.textContent = label;
+		//Add the things to the label
+        labelElem.setAttribute("for", this.id)
+        labelElem.textContent = label;
 		elem.appendChild(labelElem);
 		elem.appendChild(temp);
 		return elem;
