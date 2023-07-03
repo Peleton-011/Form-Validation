@@ -54,7 +54,7 @@ class Input {
 		const temp = elem;
 		elem = document.createElement("div");
 		const labelElem = document.createElement("label");
-		//TODO: implement label content and such
+		labelElem.textContent = label;
 		elem.appendChild(labelElem);
 		elem.appendChild(temp);
 		return elem;
