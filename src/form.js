@@ -4,13 +4,22 @@ class Form {
 	inputList = [];
 	constructor(options) {
 		const { inputList, title } = options || {};
-		this.inputList = inputList || [
-            new Input({type: "color"}), 
-            new Input({type: "textarea"}), 
-        new Input({type: "select"}), 
-        new Input({type: "cum"})
-    ];
-        this.title = title || "Unnamed form";
+		
+        //TESTING vv
+
+        const inOpts = {
+            label: "testLabel"
+        }
+
+        this.inputList = inputList || [
+			new Input({ type: "color", ...inOpts }),
+			new Input({ type: "textarea", ...inOpts  }),
+			new Input({ type: "select", ...inOpts  }),
+			new Input({ type: "cum", ...inOpts  }),
+		];
+
+        //TESTING ^^
+		this.title = title || "Unnamed form";
 	}
 
 	getElement() {
@@ -20,7 +29,7 @@ class Form {
 			form.appendChild(input.getElement());
 		});
 
-        form.setAttribute("title", this.title);
+		form.setAttribute("title", this.title);
 
 		return form;
 	}

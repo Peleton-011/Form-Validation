@@ -27,9 +27,10 @@ class Input {
 		"submit",
 	];
 	constructor(options) {
-		const { type } = options || {};
+		const { type, label } = options || {};
 
 		this.type = type;
+		this.label = label || null;
 
 		//idk
 	}
@@ -38,16 +39,35 @@ class Input {
 		//Determine correct element type
 		const elementType = this.#getElementType();
 		//Create the element
-		const input = document.createElement(elementType);
-
+		let input = document.createElement(elementType);
 		//Add type etc... based on options
-		switch (elementType) {
+		this.#setTypeAttribute(input, elementType);
+
+		//Add label if necessary
+		input = this.#addLabel(this.label, input)
+
+		return input;
+	}
+
+	#addLabel(label, elem) {
+		if (!label) return elem;
+		const temp = elem;
+		elem = document.createElement("div");
+		const labelElem = document.createElement("label");
+		//TODO: implement label content and such
+		elem.appendChild(labelElem);
+		elem.appendChild(temp);
+		return elem;
+	}
+
+	#setTypeAttribute(elem, type) {
+		switch (type) {
 			case "input":
-				input.setAttribute("type", this.type);
+				elem.setAttribute("type", this.type);
 				break;
 
 			case "p":
-				input.textContent =
+				elem.textContent =
 					"Sorry, '" +
 					this.type +
 					"' is not an accepted input type. Please try again";
@@ -56,8 +76,6 @@ class Input {
 			default:
 				break;
 		}
-
-		return input;
 	}
 
 	#getElementType() {
@@ -67,10 +85,10 @@ class Input {
 			return "p";
 		}
 
-        if (type === "textarea" || type === "select") {
-            return type
-        }
-        return "input"
+		if (type === "textarea" || type === "select") {
+			return type;
+		}
+		return "input";
 	}
 }
 
