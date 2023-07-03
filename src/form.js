@@ -4,29 +4,40 @@ class Form {
 	inputList = [];
 	constructor(options) {
 		const { inputList, title } = options || {};
-		
-        //TESTING vv
 
-        const inOpts = {
-            label: "testLabel",
-            get id() {
-                if (!this._id) {
-                  this._id = 0;
-                }
-                return String(this._id++);
-              },
-            name: "testLabel",
-            groupClass: "testGroupClass"
-        }
+		//TESTING vv
 
-        this.inputList = inputList || [
+		const inOpts = {
+			label: "testLabel",
+			get id() {
+				if (!this._id) {
+					this._id = 0;
+				}
+				return String(this._id++);
+			},
+			name: "testLabel",
+			groupClass: "testGroupClass",
+			validationRequirements: {
+				required: true,
+				max: null,
+				min: null,
+				maxlen: null,
+				minlen: null,
+				pattern: null,
+				size: null,
+				step: null,
+				value: null,
+			},
+		};
+
+		this.inputList = inputList || [
 			new Input({ type: "color", ...inOpts }),
-			new Input({ type: "textarea", ...inOpts  }),
+			new Input({ type: "textarea", ...inOpts }),
 			new Input({ type: "select", ...inOpts, label: null }),
-			new Input({ type: "cum", ...inOpts  }),
+			new Input({ type: "cum", ...inOpts }),
 		];
 
-        //TESTING ^^
+		//TESTING ^^
 		this.title = title || "Unnamed form";
 	}
 
