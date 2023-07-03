@@ -27,11 +27,13 @@ class Input {
 		"submit",
 	];
 	constructor(options) {
-		const { type, label, id } = options || {};
+		const { type, label, id, name, groupClass } = options || {};
 
 		this.type = type;
 		this.label = label || null;
         this.id = id || null;
+        this.name = name || null;
+        this.groupClass = groupClass || null;
 
 		//idk
 	}
@@ -43,10 +45,12 @@ class Input {
 		let input = document.createElement(elementType);
 		//Add type etc... based on options
 		this.#setTypeAttribute(input, elementType);
-        //Add id and such if necessary
+        //Add id and such 
         input.id = this.id
+        input.setAttribute("name", this.name);
 		//Add label if necessary
 		input = this.#addLabel(this.label, input)
+        input.className = this.groupClass;
 
 		return input;
 	}

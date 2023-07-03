@@ -14,13 +14,15 @@ class Form {
                   this._id = 0;
                 }
                 return String(this._id++);
-              }
+              },
+            name: "testLabel",
+            groupClass: "testGroupClass"
         }
 
         this.inputList = inputList || [
 			new Input({ type: "color", ...inOpts }),
 			new Input({ type: "textarea", ...inOpts  }),
-			new Input({ type: "select", ...inOpts  }),
+			new Input({ type: "select", ...inOpts, label: null }),
 			new Input({ type: "cum", ...inOpts  }),
 		];
 
