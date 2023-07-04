@@ -42,19 +42,29 @@ class Form {
 		};
 
 		this.inputList = inputList || [
-			new RawInput({ type: "color", ...inOpts }),
-			new RawInput({ type: "textarea", ...inOpts }),
-			new RawInput({ type: "select", ...inOpts, label: null }),
-			new RawInput({ type: "cum", ...inOpts }),
-			new Fieldset({
-				inputList: [
-					new RawInput({ type: "color", ...inOpts }),
-					new RawInput({ type: "textarea", ...inOpts }),
-					new RawInput({ type: "select", ...inOpts, label: null }),
-					new RawInput({ type: "cum", ...inOpts }),
-				],
-				legend: "cum",
-			}),
+			{ type: "input", options: { type: "color", ...inOpts } },
+			{ type: "input", options: { type: "textarea", ...inOpts } },
+			{
+				type: "input",
+				options: { type: "select", ...inOpts, label: null },
+			},
+			{ type: "input", options: { type: "cum", ...inOpts } },
+			{
+				type: "fieldset",
+				options: {
+					inputList: [
+						new RawInput({ type: "color", ...inOpts }),
+						new RawInput({ type: "textarea", ...inOpts }),
+						new RawInput({
+							type: "select",
+							...inOpts,
+							label: null,
+						}),
+						new RawInput({ type: "cum", ...inOpts }),
+					],
+					legend: "cum",
+				},
+			},
 		];
 
 		//TESTING ^^
@@ -64,13 +74,30 @@ class Form {
 	getElement() {
 		const form = document.createElement("form");
 
-		this.inputList.forEach((input) => {
+        this.#parseInputList(this.inputList).forEach((input) => {
 			form.appendChild(input.getElement());
 		});
 
 		form.setAttribute("title", this.title);
 
 		return form;
+	}
+
+	#parseInputList(list) {
+		const newList = [];
+		list.forEach(({ type, options }) => {
+			switch (type) {
+				case "input":
+					newList.push(new RawInput(options));
+					break;
+				case "fieldset":
+					newList.push(new Fieldset(options));
+					break;
+				default:
+					newList.push(new RawInput({ ...options, type: type }));
+			}
+		});
+        return newList;
 	}
 }
 
