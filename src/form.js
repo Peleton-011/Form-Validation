@@ -19,14 +19,13 @@ class Form {
 			groupClass: "testGroupClass",
 			validationRequirements: {
 				required: true,
-				max: null,
-				min: null,
+				max: 50,
+				min: 25,
 				maxlen: null,
 				minlen: null,
 				pattern: null,
 				size: null,
 				step: null,
-				value: null,
 			},
 		};
 

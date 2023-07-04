@@ -35,7 +35,7 @@ class Input {
 		this.id = id || null;
 		this.name = name || null;
 		this.groupClass = groupClass || null;
-        this.validationRequirements = validationRequirements || null;
+		this.validationRequirements = validationRequirements || null;
 
 		//idk
 	}
@@ -45,16 +45,44 @@ class Input {
 		const elementType = this.#getElementType();
 		//Create the element
 		let input = document.createElement(elementType);
+
 		//Add type etc... based on options
 		this.#setTypeAttribute(input, elementType);
 		//Add id and such
 		input.id = this.id;
 		input.setAttribute("name", this.name);
+
+		//Add restrictions
+		this.#addRestrictions(input);
+
 		//Add label if necessary
 		input = this.#addLabel(this.label, input);
 		input.className = this.groupClass;
 
 		return input;
+	}
+
+	#addRestrictions(elem) {
+		const {
+			required,
+			max,
+			min,
+			maxlen,
+			minlen,
+			pattern,
+			size,
+			step,
+		} = this.validationRequirements;
+
+        if (required) elem.setAttribute("required", required);
+        if (max) elem.setAttribute("max", max);
+        if (min) elem.setAttribute("min", min);
+        if (maxlen) elem.setAttribute("maxlen", maxlen);
+        if (minlen) elem.setAttribute("minlen", minlen);
+        if (pattern) elem.setAttribute("pattern", pattern);
+        if (size) elem.setAttribute("size", size);
+        if (step) elem.setAttribute("step", step);
+
 	}
 
 	#addLabel(label, elem) {
