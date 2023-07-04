@@ -7,8 +7,6 @@ class Form {
 
 		this.inputList = inputList || [];
 
-		console.log(title);
-
 		this.title = title || null;
 	}
 
