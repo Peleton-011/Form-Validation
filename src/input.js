@@ -59,10 +59,10 @@ class Input {
 		input.setAttribute("name", this.name);
 
 		//Add restrictions
-		this.#addRestrictions(input);
+		if (this.validationRequirements) this.#addRestrictions(input);
 
 		//Add other properties
-		this.#addAdditionalProperties(input);
+		if (this.secondaryProperties) this.#addAdditionalProperties(input);
 
 		//Add label if necessary
 		input = this.#addLabel(this.label, input);
