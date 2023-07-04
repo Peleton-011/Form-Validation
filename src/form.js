@@ -27,6 +27,18 @@ class Form {
 				size: null,
 				step: null,
 			},
+            secondaryProperties: {
+                readonly: null,
+                disabled: null,
+                autofocus: null,
+                placeholder: "test",
+                spellcheck: null,
+                autocomplete: null,
+                multiple: null,
+                checked: null,
+                formnovalidate: null,
+                form: null,
+            }
 		};
 
 		this.inputList = inputList || [

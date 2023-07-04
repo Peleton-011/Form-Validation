@@ -27,8 +27,15 @@ class Input {
 		"submit",
 	];
 	constructor(options) {
-		const { type, label, id, name, groupClass, validationRequirements } =
-			options || {};
+		const {
+			type,
+			label,
+			id,
+			name,
+			groupClass,
+			validationRequirements,
+			secondaryProperties,
+		} = options || {};
 
 		this.type = type;
 		this.label = label || null;
@@ -36,8 +43,7 @@ class Input {
 		this.name = name || null;
 		this.groupClass = groupClass || null;
 		this.validationRequirements = validationRequirements || null;
-
-		//idk
+		this.secondaryProperties = secondaryProperties || null;
 	}
 
 	getElement() {
@@ -55,6 +61,9 @@ class Input {
 		//Add restrictions
 		this.#addRestrictions(input);
 
+		//Add other properties
+		this.#addAdditionalProperties(input);
+
 		//Add label if necessary
 		input = this.#addLabel(this.label, input);
 		input.className = this.groupClass;
@@ -62,27 +71,44 @@ class Input {
 		return input;
 	}
 
-	#addRestrictions(elem) {
+	#addAdditionalProperties(elem) {
 		const {
-			required,
-			max,
-			min,
-			maxlen,
-			minlen,
-			pattern,
-			size,
-			step,
-		} = this.validationRequirements;
+			readonly,
+			disabled,
+			autofocus,
+			placeholder,
+			spellcheck,
+			autocomplete,
+			multiple,
+			checked,
+			formnovalidate,
+			form,
+		} = this.secondaryProperties;
 
-        if (required) elem.setAttribute("required", required);
-        if (max) elem.setAttribute("max", max);
-        if (min) elem.setAttribute("min", min);
-        if (maxlen) elem.setAttribute("maxlen", maxlen);
-        if (minlen) elem.setAttribute("minlen", minlen);
-        if (pattern) elem.setAttribute("pattern", pattern);
-        if (size) elem.setAttribute("size", size);
-        if (step) elem.setAttribute("step", step);
+		if (readonly) elem.setAttribute("readonly", readonly);
+		if (disabled) elem.setAttribute("disabled", disabled);
+		if (autofocus) elem.setAttribute("autofocus", autofocus);
+		if (placeholder) elem.setAttribute("placeholder", placeholder);
+		if (spellcheck) elem.setAttribute("spellcheck", spellcheck);
+		if (autocomplete) elem.setAttribute("autocomplete", autocomplete);
+		if (multiple) elem.setAttribute("multiple", multiple);
+		if (checked) elem.setAttribute("checked", checked);
+		if (formnovalidate) elem.setAttribute("formnovalidate", formnovalidate);
+		if (form) elem.setAttribute("form", form);
+	}
 
+	#addRestrictions(elem) {
+		const { required, max, min, maxlen, minlen, pattern, size, step } =
+			this.validationRequirements;
+
+		if (required) elem.setAttribute("required", required);
+		if (max) elem.setAttribute("max", max);
+		if (min) elem.setAttribute("min", min);
+		if (maxlen) elem.setAttribute("maxlen", maxlen);
+		if (minlen) elem.setAttribute("minlen", minlen);
+		if (pattern) elem.setAttribute("pattern", pattern);
+		if (size) elem.setAttribute("size", size);
+		if (step) elem.setAttribute("step", step);
 	}
 
 	#addLabel(label, elem) {
