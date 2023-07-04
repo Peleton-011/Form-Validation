@@ -8,7 +8,7 @@ function setup() {
 
 	//TESTING ^^
 
-	const form = new Form({ inputList: list, title: "Sample Title" });
+	const form = new Form({ inputList: list, title: {title: "Sample Title", titleType: "h3"} });
 
 	body.appendChild(form.getElement());
 }

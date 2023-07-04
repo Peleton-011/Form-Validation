@@ -7,20 +7,36 @@ class Form {
 
 		this.inputList = inputList || [];
 
-		//TESTING ^^
-		this.title = title || "Unnamed form";
+		console.log(title);
+
+		this.title = title || null;
 	}
 
 	getElement() {
-		const form = document.createElement("form");
+		let form = document.createElement("form");
 
 		parseInputList(this.inputList).forEach((input) => {
 			form.appendChild(input.getElement());
 		});
 
-		form.setAttribute("title", this.title);
+        if (this.title) {
+            form.setAttribute("title", this.title.title);
+
+            form = this.#addTitle(form);
+        }
 
 		return form;
+	}
+
+	#addTitle(elem) {
+		const wrapper = document.createElement("div");
+		const title = document.createElement(this.title.titleType || "h1");
+
+		title.innerText = this.title.title || "Unnamed Form";
+		wrapper.appendChild(title);
+		wrapper.appendChild(elem);
+
+		return wrapper;
 	}
 }
 
