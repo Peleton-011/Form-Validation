@@ -1,4 +1,4 @@
-import Input from "./input.js";
+import RawInput from "./input.js";
 
 class Form {
 	inputList = [];
@@ -27,25 +27,34 @@ class Form {
 				size: null,
 				step: null,
 			},
-            secondaryProperties: {
-                readonly: null,
-                disabled: null,
-                autofocus: null,
-                placeholder: "test",
-                spellcheck: null,
-                autocomplete: null,
-                multiple: null,
-                checked: null,
-                formnovalidate: null,
-                form: null,
-            }
+			secondaryProperties: {
+				readonly: null,
+				disabled: null,
+				autofocus: null,
+				placeholder: "test",
+				spellcheck: null,
+				autocomplete: null,
+				multiple: null,
+				checked: null,
+				formnovalidate: null,
+				form: null,
+			},
 		};
 
 		this.inputList = inputList || [
-			new Input({ type: "color", ...inOpts }),
-			new Input({ type: "textarea", ...inOpts }),
-			new Input({ type: "select", ...inOpts, label: null }),
-			new Input({ type: "cum", ...inOpts }),
+			new RawInput({ type: "color", ...inOpts }),
+			new RawInput({ type: "textarea", ...inOpts }),
+			new RawInput({ type: "select", ...inOpts, label: null }),
+			new RawInput({ type: "cum", ...inOpts }),
+			new Fieldset({
+				inputList: [
+					new RawInput({ type: "color", ...inOpts }),
+					new RawInput({ type: "textarea", ...inOpts }),
+					new RawInput({ type: "select", ...inOpts, label: null }),
+					new RawInput({ type: "cum", ...inOpts }),
+				],
+				legend: "cum",
+			}),
 		];
 
 		//TESTING ^^
@@ -62,6 +71,27 @@ class Form {
 		form.setAttribute("title", this.title);
 
 		return form;
+	}
+}
+
+class Fieldset {
+	constructor({ inputList, legend }) {
+		this.inputList = inputList || null;
+		this.legend = legend || null;
+	}
+
+	getElement() {
+		const fieldSet = document.createElement("fieldset");
+		if (this.legend) {
+			const legend = document.createElement("legend");
+			legend.innerText = this.legend;
+			fieldSet.appendChild(legend);
+		}
+		this.inputList.forEach((input) =>
+			fieldSet.appendChild(new RawInput(input).getElement())
+		);
+
+		return fieldSet;
 	}
 }
 
