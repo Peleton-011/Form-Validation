@@ -15,9 +15,9 @@ class Form {
 
 		parseInputList(this.inputList).forEach((input) => {
             let inputElem = input.getElement();
-            if (input.validationRequirements) {
-                inputElem = this.#addErrorMessage(inputElem)
-            }
+            // if (input.validationRequirements) {
+            //     inputElem = this.#addErrorMessage(inputElem)
+            // }
 			form.appendChild(inputElem);
 		});
 

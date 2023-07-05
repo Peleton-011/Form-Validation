@@ -83,7 +83,7 @@ class Input {
 
 		//Add label if necessary
 		if (this.label) wrapper.appendChild(this.#getLabel(this.label));
-		wrapper.className = this.groupClass;
+		wrapper.className = this.groupClass + " " + "input-wrapper";
 
 		wrapper.appendChild(elem);
 
