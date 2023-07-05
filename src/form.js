@@ -14,7 +14,11 @@ class Form {
 		let form = document.createElement("form");
 
 		parseInputList(this.inputList).forEach((input) => {
-			form.appendChild(input.getElement());
+            let inputElem = input.getElement();
+            if (input.validationRequirements) {
+                inputElem = this.#addErrorMessage(inputElem)
+            }
+			form.appendChild(inputElem);
 		});
 
         if (this.title) {
