@@ -53,10 +53,16 @@ class Form {
 
 		//TODO: Add proper validation for time & datetime inputs
 
-		if (required) functions.push((e) => {});
+		if (required) functions.push((e) => {
+            const inputValue = e.target.value.trim();
+
+            if (inputValue && Number(inputValue.length) < 1) {
+                return `Input is required`;
+            }
+        });
 		if (max || typeof max === "string")
 			functions.push((e) => {
-				const inputValue = e.target.value;
+				const inputValue = e.target.value.trim();
 
 				if (inputValue && Number(inputValue) > Number(min)) {
 					return `Input value is greater than the maximum value: ${max}`;
@@ -64,7 +70,7 @@ class Form {
 			});
 		if (min || typeof min === "string")
 			functions.push((e) => {
-				const inputValue = e.target.value;
+				const inputValue = e.target.value.trim();
 
 				if (inputValue && Number(inputValue) < Number(min)) {
 					return `Input value is less than the minimum value: ${min}`;
@@ -72,7 +78,7 @@ class Form {
 			});
 		if (maxlen)
 			functions.push((e) => {
-				const inputValue = e.target.value;
+				const inputValue = e.target.value.trim();
 
 				if (inputValue && Number(inputValue.length) > Number(maxlen)) {
 					return `Input value is longer than the maximum length: ${maxlen}`;
@@ -80,7 +86,7 @@ class Form {
 			});
 		if (minlen)
 			functions.push((e) => {
-				const inputValue = e.target.value;
+				const inputValue = e.target.value.trim();
 
 				if (inputValue && Number(inputValue.length) < Number(minlen)) {
 					return `Input value is shorter than the minimum length: ${minlen}`;
@@ -88,7 +94,7 @@ class Form {
 			});
 		if (pattern)
 			functions.push((e) => {
-				const inputValue = e.target.value;
+				const inputValue = e.target.value.trim();
 
 				const regex = new RegExp(pattern);
 				if (!regex.test(inputValue)) {
@@ -103,7 +109,7 @@ class Form {
 		//TODO: Implement size validation
 		if (step)
 			functions.push((e) => {
-				const value = Number(e.target.value);
+				const value = Number(e.target.value.trim());
 				const stepValue = Number(step);
 
 				if (value % stepValue !== 0) {
