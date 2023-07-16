@@ -200,7 +200,7 @@ function getValidationFunction(validationRequirements) {
 		}, "");
 		// console.log("ass ",final);
 		errorMsg.textContent = final;
-		errorMsg.className = final ? "active" : "";
+		errorMsg.classList[final? "add": "remove"]("active");
 	};
 }
 
