@@ -81,3 +81,5 @@ function makeInputList() {
 }
 
 setup();
+
+export default Form
