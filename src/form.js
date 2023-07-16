@@ -3,10 +3,12 @@ import RawInput from "./input.js";
 class Form {
 	inputList = [];
 	constructor(options) {
-		const { inputList, title } = options || {};
+		const { inputList, title, formOptions } = options || {};
+
+		this.customPopup = formOptions.customPopup;
+		this.jsValidate = formOptions.jsValidate;
 
 		this.inputList = inputList || [];
-		console.log(inputList);
 
 		this.title = title || null;
 	}
@@ -14,13 +16,40 @@ class Form {
 	getElement() {
 		let form = document.createElement("form");
 
-		parseInputList(this.inputList).forEach((input) => {
+		if (this.customPopup) {
+			form.setAttribute("novalidate", "true");
+		}
+
+		parseInputList(
+			this.inputList,
+			this.jsValidate,
+			this.customPopup
+		).forEach((input) => {
 			form.appendChild(input);
 		});
 
 		if (this.title) form = this.#addTitle(form);
 
+		form.onsubmit = (e) => {
+			e.preventDefault();
+			const isValid = this.#checkValidity(form);
+			console.log("val ", isValid);
+		};
 		return form;
+	}
+
+	#checkValidity(elem) {
+		const blurEvent = new Event("blur");
+		const children = elem.querySelectorAll(
+			"input, select, textarea, checkbox, radio, datalist, output"
+		);
+
+		return Array.from(children).reduce((acc, el) => {
+			el.dispatchEvent(blurEvent);
+            console.log(el)
+            console.log(el.validity.valid)
+			return acc && el.validity.valid;
+		}, true);
 	}
 
 	#addTitle(elem) {
@@ -37,9 +66,11 @@ class Form {
 }
 
 class Fieldset {
-	constructor({ inputList, legend }) {
+	constructor({ inputList, legend, jsValidate, customPopup }) {
 		this.inputList = inputList || null;
 		this.legend = legend || null;
+		this.jsVal = jsValidate || null;
+		this.customPopup = customPopup || null;
 	}
 
 	getElement() {
@@ -49,20 +80,20 @@ class Fieldset {
 			legend.innerText = this.legend;
 			fieldSet.appendChild(legend);
 		}
-		parseInputList(this.inputList).forEach((input) =>
-			fieldSet.appendChild(input)
+		parseInputList(this.inputList, this.jsVal, this.customPopup).forEach(
+			(input) => fieldSet.appendChild(input)
 		);
 
 		return fieldSet;
 	}
 }
 
-function parseInputList(list) {
+function parseInputList(list, jsVal, customPopup) {
 	const newList = [];
 	list.map(({ type, options }) => {
 		//Remove built-in validation if js validation is turned on
 		const newOptions = options.validationRequirements
-			? options.validationRequirements.jsValidate
+			? jsVal
 				? { ...options, validationRequirements: null }
 				: options
 			: options;
@@ -74,33 +105,29 @@ function parseInputList(list) {
 				curr = new RawInput(newOptions);
 				break;
 			case "fieldset":
-				curr = new Fieldset(newOptions);
+				curr = new Fieldset(newOptions, jsVal, customPopup);
 				break;
 			default:
 				curr = new RawInput({ ...newOptions, type: type });
 		}
 
 		//Add js validation if necessary
-		newList.push(inputToElem(curr, options));
+		newList.push(inputToElem(curr, options, jsVal, customPopup));
 	});
 
 	return newList;
 }
 
-function inputToElem(input, options) {
+function inputToElem(input, options, jsVal, customPopup) {
 	const elem = input.getElement();
-	if (
-		options.validationRequirements &&
-		options.validationRequirements.jsValidate
-	)
-		addJsValidation(options, elem);
+	if (jsVal) {
+		addJsValidation(options, elem, customPopup);
+	}
 	return elem;
 }
 
-function addJsValidation(inputOpts, elem) {
-	console.log("adding shit");
+function addJsValidation(inputOpts, elem, customPopup) {
 	const inputElem = elem.querySelector(`#${inputOpts.id}`);
-	const customPopup = inputOpts.validationRequirements.customPopup;
 	if (customPopup) {
 		const errorMsg = document.createElement("span");
 		errorMsg.setAttribute("aria-live", "polite");
@@ -110,16 +137,11 @@ function addJsValidation(inputOpts, elem) {
 	}
 
 	inputElem.onblur = (e) => {
+		const msg = getValidationMessage(inputOpts.validationRequirements, e);
 		if (customPopup) {
-			errorMessageFunc(
-				getValidationMessage(inputOpts.validationRequirements, e),
-				e
-			);
-		} else {
-			inputElem.setCustomValidity(
-				getValidationMessage(inputOpts.validationRequirements, e)
-			);
+			errorMessageFunc(msg, e);
 		}
+		inputElem.setCustomValidity(msg);
 	};
 }
 
@@ -132,8 +154,17 @@ function errorMessageFunc(msg, e) {
 }
 
 function getValidationMessage(validationRequirements, e) {
-	const { required, max, min, maxlen, minlen, pattern, size, step, customMsgs } =
-		validationRequirements;
+	const {
+		required,
+		max,
+		min,
+		maxlen,
+		minlen,
+		pattern,
+		size,
+		step,
+		customMsgs,
+	} = validationRequirements;
 	const functions = [];
 
 	//TODO: Add proper validation for time & datetime inputs
@@ -152,7 +183,10 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue) > Number(min)) {
-				return customMsgs.max ||`Input value is greater than the maximum value: ${max}`;
+				return (
+					customMsgs.max ||
+					`Input value is greater than the maximum value: ${max}`
+				);
 			}
 			return "";
 		});
@@ -161,7 +195,10 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue) < Number(min)) {
-				return customMsgs.min ||`Input value is less than the minimum value: ${min}`;
+				return (
+					customMsgs.min ||
+					`Input value is less than the minimum value: ${min}`
+				);
 			}
 			return "";
 		});
@@ -170,7 +207,10 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue.length) > Number(maxlen)) {
-				return customMsgs.maxlen ||`Input value is longer than the maximum length: ${maxlen}`;
+				return (
+					customMsgs.maxlen ||
+					`Input value is longer than the maximum length: ${maxlen}`
+				);
 			}
 			return "";
 		});
@@ -179,7 +219,10 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue.length) < Number(minlen)) {
-				return customMsgs.minlen ||`Input value is shorter than the minimum length: ${minlen}`;
+				return (
+					customMsgs.minlen ||
+					`Input value is shorter than the minimum length: ${minlen}`
+				);
 			}
 			return "";
 		});
@@ -189,13 +232,18 @@ function getValidationMessage(validationRequirements, e) {
 
 			const regex = new RegExp(pattern);
 			if (!regex.test(inputValue)) {
-				return customMsgs.pattern ||"Input value does not match the pattern, follow the instructions";
+				return (
+					customMsgs.pattern ||
+					"Input value does not match the pattern, follow the instructions"
+				);
 			}
 			return "";
 		});
 	if (size)
 		functions.push((e) => {
-			console.log(customMsgs.size ||"Hi, sorry, i don't know what happened :/");
+			console.log(
+				customMsgs.size || "Hi, sorry, i don't know what happened :/"
+			);
 		});
 
 	//TODO: Implement size validation
@@ -205,7 +253,10 @@ function getValidationMessage(validationRequirements, e) {
 			const stepValue = Number(step);
 
 			if (value % stepValue !== 0) {
-				return customMsgs.step ||`Input value does not match the specified step interval: ${step}`;
+				return (
+					customMsgs.step ||
+					`Input value does not match the specified step interval: ${step}`
+				);
 			}
 			return "";
 		});

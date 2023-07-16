@@ -94,7 +94,6 @@ class Input {
 			autocomplete,
 			multiple,
 			checked,
-			novalidate,
 			form,
 		} = this.secondaryProperties;
 
@@ -106,7 +105,6 @@ class Input {
 		if (autocomplete) elem.setAttribute("autocomplete", autocomplete);
 		if (multiple) elem.setAttribute("multiple", multiple);
 		if (checked) elem.setAttribute("checked", checked);
-		if (novalidate) elem.setAttribute("novalidate", novalidate);
 		if (form) elem.setAttribute("form", form);
 	}
 

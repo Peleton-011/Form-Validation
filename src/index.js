@@ -11,6 +11,10 @@ function setup() {
 	const form = new Form({
 		inputList: list,
 		title: { title: "Sample Title", titleType: "h3" },
+		formOptions: {
+			customPopup: true,
+			jsValidate: true,
+		},
 	});
 
 	body.appendChild(form.getElement());
@@ -36,8 +40,6 @@ function makeInputList() {
 			pattern: null,
 			size: null,
 			step: null,
-			customPopup: true,
-			jsValidate: true,
 			customMsgs: {
 				minlen: "Test for minlen",
 				required: "Test for req",
@@ -52,16 +54,15 @@ function makeInputList() {
 			autocomplete: null,
 			multiple: null,
 			checked: null,
-			formnovalidate: null,
-			form: null,
+			//form
 		},
 	};
 
 	return [
-		{ type: "input", options: { type: "email", ...inOpts } },
+		{ type: "input", options: { type: "text", ...inOpts } },
 		{ type: "input", options: { type: "text", ...inOpts } },
 		{ type: "input", options: { type: "password", ...inOpts } },
-		{
+		/*{
 			type: "fieldset",
 			options: {
 				inputList: [
@@ -71,10 +72,10 @@ function makeInputList() {
 				],
 				legend: "cum",
 			},
-		},
+		},*/
 		{
 			type: "input",
-			options: { type: "submit", ...inOpts },
+			options: { type: "submit", ...inOpts, validationRequirements: {} },
 		},
 	];
 }
