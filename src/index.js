@@ -8,7 +8,10 @@ function setup() {
 
 	//TESTING ^^
 
-	const form = new Form({ inputList: list, title: {title: "Sample Title", titleType: "h3"} });
+	const form = new Form({
+		inputList: list,
+		title: { title: "Sample Title", titleType: "h3" },
+	});
 
 	body.appendChild(form.getElement());
 }
@@ -20,7 +23,7 @@ function makeInputList() {
 			if (!this._id) {
 				this._id = 0;
 			}
-			return String(this._id++);
+			return String("sampleid" + this._id++);
 		},
 		name: "testLabel",
 		groupClass: "testGroupClass",
@@ -29,10 +32,12 @@ function makeInputList() {
 			max: 50,
 			min: 25,
 			maxlen: null,
-			minlen: null,
+			minlen: 5,
 			pattern: null,
 			size: null,
 			step: null,
+			popUp: true,
+			jsValidate: true,
 		},
 		secondaryProperties: {
 			readonly: null,
@@ -49,27 +54,23 @@ function makeInputList() {
 	};
 
 	return [
-		{ type: "input", options: { type: "color", ...inOpts } },
-		{ type: "input", options: { type: "textarea", ...inOpts } },
-		{
-			type: "input",
-			options: { type: "select", ...inOpts, label: null },
-		},
-		{ type: "input", options: { type: "cum", ...inOpts } },
+		{ type: "input", options: { type: "email", ...inOpts } },
+		{ type: "input", options: { type: "text", ...inOpts } },
+		{ type: "input", options: { type: "password", ...inOpts } },
 		{
 			type: "fieldset",
 			options: {
 				inputList: [
-					{ type: "input", options: { type: "color", ...inOpts } },
-					{ type: "input", options: { type: "textarea", ...inOpts } },
-					{
-						type: "input",
-						options: { type: "select", ...inOpts, label: null },
-					},
-					{ type: "input", options: { type: "cum", ...inOpts } },
+					{ type: "input", options: { type: "email", ...inOpts } },
+					{ type: "input", options: { type: "text", ...inOpts } },
+					{ type: "input", options: { type: "password", ...inOpts } },
 				],
 				legend: "cum",
 			},
+		},
+		{
+			type: "input",
+			options: { type: "submit", ...inOpts },
 		},
 	];
 }
