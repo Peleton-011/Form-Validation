@@ -111,7 +111,7 @@ function addJsValidation(inputOpts, elem) {
 
 	inputElem.onblur = (e) => {
 		if (customPopup) {
-			customErrorMessageFunc(
+			errorMessageFunc(
 				getValidationMessage(inputOpts.validationRequirements, e),
 				e
 			);
@@ -123,7 +123,7 @@ function addJsValidation(inputOpts, elem) {
 	};
 }
 
-function customErrorMessageFunc(msg, e) {
+function errorMessageFunc(msg, e) {
 	const input = e.target;
 	const errorMsg = input.nextSibling;
 
@@ -131,10 +131,8 @@ function customErrorMessageFunc(msg, e) {
 	errorMsg.classList[msg ? "add" : "remove"]("active");
 }
 
-function setErrorMessage(msg) {}
-
 function getValidationMessage(validationRequirements, e) {
-	const { required, max, min, maxlen, minlen, pattern, size, step } =
+	const { required, max, min, maxlen, minlen, pattern, size, step, customMsgs } =
 		validationRequirements;
 	const functions = [];
 
@@ -145,7 +143,7 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (!inputValue || Number(inputValue.length) < 1) {
-				return `Input is required`;
+				return customMsgs.required || `Input is required`;
 			}
 			return "";
 		});
@@ -154,7 +152,7 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue) > Number(min)) {
-				return `Input value is greater than the maximum value: ${max}`;
+				return customMsgs.max ||`Input value is greater than the maximum value: ${max}`;
 			}
 			return "";
 		});
@@ -163,7 +161,7 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue) < Number(min)) {
-				return `Input value is less than the minimum value: ${min}`;
+				return customMsgs.min ||`Input value is less than the minimum value: ${min}`;
 			}
 			return "";
 		});
@@ -172,7 +170,7 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue.length) > Number(maxlen)) {
-				return `Input value is longer than the maximum length: ${maxlen}`;
+				return customMsgs.maxlen ||`Input value is longer than the maximum length: ${maxlen}`;
 			}
 			return "";
 		});
@@ -181,7 +179,7 @@ function getValidationMessage(validationRequirements, e) {
 			const inputValue = e.target.value.trim();
 
 			if (inputValue && Number(inputValue.length) < Number(minlen)) {
-				return `Input value is shorter than the minimum length: ${minlen}`;
+				return customMsgs.minlen ||`Input value is shorter than the minimum length: ${minlen}`;
 			}
 			return "";
 		});
@@ -191,13 +189,13 @@ function getValidationMessage(validationRequirements, e) {
 
 			const regex = new RegExp(pattern);
 			if (!regex.test(inputValue)) {
-				return "Input value does not match the pattern, follow the instructions";
+				return customMsgs.pattern ||"Input value does not match the pattern, follow the instructions";
 			}
 			return "";
 		});
 	if (size)
 		functions.push((e) => {
-			console.log("Hi, sorry, i don't know what happened :/");
+			console.log(customMsgs.size ||"Hi, sorry, i don't know what happened :/");
 		});
 
 	//TODO: Implement size validation
@@ -207,7 +205,7 @@ function getValidationMessage(validationRequirements, e) {
 			const stepValue = Number(step);
 
 			if (value % stepValue !== 0) {
-				return `Input value does not match the specified step interval: ${step}`;
+				return customMsgs.step ||`Input value does not match the specified step interval: ${step}`;
 			}
 			return "";
 		});

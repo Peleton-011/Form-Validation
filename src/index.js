@@ -38,6 +38,10 @@ function makeInputList() {
 			step: null,
 			customPopup: true,
 			jsValidate: true,
+			customMsgs: {
+				minlen: "Test for minlen",
+				required: "Test for req",
+			},
 		},
 		secondaryProperties: {
 			readonly: null,
