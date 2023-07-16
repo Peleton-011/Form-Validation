@@ -36,7 +36,7 @@ function makeInputList() {
 			pattern: null,
 			size: null,
 			step: null,
-			popUp: true,
+			customPopup: true,
 			jsValidate: true,
 		},
 		secondaryProperties: {

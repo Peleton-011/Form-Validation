@@ -72,12 +72,6 @@ class Input {
 		return wrapper;
 	}
 
-	#getErrorContainer() {
-		const errorContainer = document.createElement("span");
-		errorContainer.classList.add("error");
-		errorContainer.setAttribute("aria-live", "polite");
-	}
-
 	#wrap(elem) {
 		const wrapper = document.createElement("div");
 
@@ -87,8 +81,6 @@ class Input {
 
 		wrapper.appendChild(elem);
 
-		//Add error message if necessary
-		if (this.hasError) wrapper.appendChild(this.#getErrorContainer());
 		return wrapper;
 	}
 

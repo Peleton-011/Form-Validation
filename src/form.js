@@ -100,16 +100,40 @@ function inputToElem(input, options) {
 function addJsValidation(inputOpts, elem) {
 	console.log("adding shit");
 	const inputElem = elem.querySelector(`#${inputOpts.id}`);
+	const customPopup = inputOpts.validationRequirements.customPopup;
+	if (customPopup) {
+		const errorMsg = document.createElement("span");
+		errorMsg.setAttribute("aria-live", "polite");
+		errorMsg.classList.add("error");
 
-	const errorMsg = document.createElement("span");
-	errorMsg.setAttribute("aria-live", "polite");
-	errorMsg.classList.add("error");
+		inputElem.insertAdjacentElement("afterend", errorMsg);
+	}
 
-	inputElem.insertAdjacentElement("afterend", errorMsg);
-	inputElem.onblur = getValidationFunction(inputOpts.validationRequirements);
+	inputElem.onblur = (e) => {
+		if (customPopup) {
+			customErrorMessageFunc(
+				getValidationMessage(inputOpts.validationRequirements, e),
+				e
+			);
+		} else {
+			inputElem.setCustomValidity(
+				getValidationMessage(inputOpts.validationRequirements, e)
+			);
+		}
+	};
 }
 
-function getValidationFunction(validationRequirements) {
+function customErrorMessageFunc(msg, e) {
+	const input = e.target;
+	const errorMsg = input.nextSibling;
+
+	errorMsg.textContent = msg;
+	errorMsg.classList[msg ? "add" : "remove"]("active");
+}
+
+function setErrorMessage(msg) {}
+
+function getValidationMessage(validationRequirements, e) {
 	const { required, max, min, maxlen, minlen, pattern, size, step } =
 		validationRequirements;
 	const functions = [];
@@ -188,20 +212,12 @@ function getValidationFunction(validationRequirements) {
 			return "";
 		});
 
-	return (e) => {
-		const input = e.target;
-		const errorMsg = input.nextSibling;
-
-		const final = functions.reduce((msgText, func) => {
-			const out = func(e);
-			// console.log(out +" + " + msgText)
-			// console.log(msgText)
-			return msgText + String(out);
-		}, "");
-		// console.log("ass ",final);
-		errorMsg.textContent = final;
-		errorMsg.classList[final? "add": "remove"]("active");
-	};
+	return functions.reduce((msgText, func) => {
+		const out = func(e);
+		// console.log(out +" + " + msgText)
+		// console.log(msgText)
+		return msgText + String(out);
+	}, "");
 }
 
 export default Form;
