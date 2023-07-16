@@ -2,7 +2,7 @@
   "name": "presa-form-validation",
   "version": "1.0.0",
   "description": "JS form validation",
-  "main": "form.js",
+  "main": "./src/form.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
