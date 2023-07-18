@@ -40,10 +40,6 @@ function makeInputList() {
 			pattern: null,
 			size: null,
 			step: null,
-			customMsgs: {
-				minlen: "Test for minlen",
-				required: "Test for req",
-			},
 		},
 		secondaryProperties: {
 			readonly: null,

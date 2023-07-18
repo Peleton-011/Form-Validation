@@ -46,8 +46,8 @@ class Form {
 
 		return Array.from(children).reduce((acc, el) => {
 			el.dispatchEvent(blurEvent);
-            console.log(el)
-            console.log(el.validity.valid)
+			console.log(el);
+			console.log(el.validity.valid);
 			return acc && el.validity.valid;
 		}, true);
 	}
@@ -154,21 +154,16 @@ function errorMessageFunc(msg, e) {
 }
 
 function getValidationMessage(validationRequirements, e) {
-	const {
-		required,
-		max,
-		min,
-		maxlen,
-		minlen,
-		pattern,
-		size,
-		step,
-		customMsgs,
-	} = validationRequirements;
+	const { required, max, min, maxlen, minlen, pattern, size, step } =
+		validationRequirements;
 	const functions = [];
 
-	//TODO: Add proper validation for time & datetime inputs
+	//In case no customMsg is given:
+	const customMsgs = validationRequirements.customMsgs
+		? validationRequirements.customMsgs
+		: {};
 
+	//TODO: Add proper validation for time & datetime inputs
 	if (required)
 		functions.push((e) => {
 			const inputValue = e.target.value.trim();
