@@ -33,7 +33,6 @@ class Form {
 		form.onsubmit = (e) => {
 			e.preventDefault();
 			const isValid = this.#checkValidity(form);
-			console.log("val ", isValid);
 		};
 		return form;
 	}
@@ -46,8 +45,6 @@ class Form {
 
 		return Array.from(children).reduce((acc, el) => {
 			el.dispatchEvent(blurEvent);
-			console.log(el);
-			console.log(el.validity.valid);
 			return acc && el.validity.valid;
 		}, true);
 	}
